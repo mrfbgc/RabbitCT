@@ -57,7 +57,7 @@
   call;                                                                                  \
   rabbitTimer_stopCycles(&cycleData);
 #endif /* LIKWID_PERFMON */
-
+//voxel size part is defined below:
 static float volumeResolution(const int problemSize)
 {
   float rv = 0.0f;
