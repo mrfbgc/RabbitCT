@@ -14,6 +14,6 @@ endif
 VERSION  = --version
 CFLAGS   = $(FAST_WORKAROUND) -xHost -std=c99 -Wno-unused-command-line-argument $(OPENMP)
 LFLAGS   = $(OPENMP)
-DEFINES  = -D_GNU_SOURCE
+DEFINES  += -D_GNU_SOURCE
 INCLUDES =
 LIBS     =

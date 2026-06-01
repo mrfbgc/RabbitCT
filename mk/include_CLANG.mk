@@ -14,7 +14,7 @@ VERSION  = --version
 CFLAGS   = -O3 -ffast-math -std=c99 $(OPENMP)
 #CFLAGS   = -Ofast -fnt-store=aggressive  -std=c99 $(OPENMP) #AMD CLANG
 LFLAGS   = $(OPENMP)
-DEFINES  = -D_GNU_SOURCE
+DEFINES  += -D_GNU_SOURCE
 ifeq ($(shell uname -s),Darwin)
 INCLUDES = -I/opt/homebrew/opt/libomp/include
 else
