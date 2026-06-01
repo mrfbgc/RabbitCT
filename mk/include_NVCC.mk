@@ -1,23 +1,14 @@
-CC = gcc
-
-# CUDA compiler
-NVCC = nvcc
-
-# Linker: use nvcc so it can resolve CUDA runtime symbols
-LD = $(NVCC)
+CC = nvcc
+LD = $(CC)
 
 ifeq ($(strip $(ENABLE_OPENMP)),true)
 OPENMP   = -Xcompiler "-fopenmp"
 endif
 
 VERSION  = --version
-CFLAGS   = -O3 -g -std=c99 $(OPENMP)
-LFLAGS   = $(OPENMP) -lm $(CUDA_ARCH)
+CFLAGS   = -O3 -std=c++17 $(CUDA_ARCH) $(OPENMP)
+LFLAGS   = $(OPENMP)
 
-# NVCC flags — host compiler options passed via -Xcompiler
-# CUDA_ARCH ?= sm_80
-NVCCFLAGS = -O3 -g $(CUDA_ARCH) -Xcompiler "$(OPENMP)"
-
-DEFINES  += -D_GNU_SOURCE -DRUNTIME_BACKEND_IS_CUDA
+DEFINES  +=  -DENABLE_CUDA -D_GNU_SOURCE -DRUNTIME_BACKEND_IS_CUDA
 INCLUDES  =
-LIBS      = -lcudart -lm
+LIBS      = -lcudart
