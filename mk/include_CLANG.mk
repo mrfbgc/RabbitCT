@@ -1,7 +1,7 @@
 CC   = clang
 LD = $(CC)
 
-ifeq ($(ENABLE_OPENMP),true)
+ifeq ($(strip $(ENABLE_OPENMP)),true)
 ifeq ($(shell uname -s),Darwin)
 OPENMP   = -Xpreprocessor -fopenmp
 LIBS     = -L/opt/homebrew/opt/libomp/lib -lomp

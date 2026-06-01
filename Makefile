@@ -4,8 +4,8 @@
 # license that can be found in the LICENSE file.
 
 #CONFIGURE BUILD SYSTEM
-TARGET	   = rabbitRunner-$(TOOLCHAIN)
-BUILD_DIR  = ./build/$(TOOLCHAIN)
+TARGET	   = rabbitRunner-$(SIMD)-$(TOOLCHAIN)
+BUILD_DIR  = ./build/$(SIMD)-$(TOOLCHAIN)
 SRC_DIR    = ./src
 MAKE_DIR   = ./mk
 Q         ?= @
@@ -39,6 +39,12 @@ OBJ       += $(patsubst $(SRC_DIR)/%.ispc, $(BUILD_DIR)/%.o,$(wildcard $(SRC_DIR
 include $(MAKE_DIR)/include_ISPC.mk
 SRC       =  $(wildcard $(SRC_DIR)/*.h $(SRC_DIR)/*.c)
 CPPFLAGS := $(CPPFLAGS) $(DEFINES) $(OPTIONS) $(INCLUDES)
+
+ifneq (,$(filter $(TOOLCHAIN),NVCC HIP))
+  CPPFLAGS += -D_GPU
+  OBJ   += $(patsubst $(SRC_DIR)/%.cu, $(BUILD_DIR)/%.o, $(wildcard $(SRC_DIR)/*.cu))
+endif
+
 c := ,
 clist = $(subst $(eval) ,$c,$(strip $1))
 
@@ -56,6 +62,10 @@ $(BUILD_DIR)/%.o:  %.c $(MAKE_DIR)/include_$(TOOLCHAIN).mk config.mk
 	$(info ===>  COMPILE  $@)
 	$(CC) -c $(CPPFLAGS) $(CFLAGS) $< -o $@
 	$(Q)$(CC) $(CPPFLAGS) -MT $(@:.d=.o) -MM  $< > $(BUILD_DIR)/$*.d
+
+$(BUILD_DIR)/%.o: %.cu $(MAKE_DIR)/include_$(TOOLCHAIN).mk config.mk
+	$(info ===>  COMPILE CUDA  $@)
+	$(NVCC) -c $(NVCCFLAGS) $(CPPFLAGS) $< -o $@
 
 $(BUILD_DIR)/%.s:  %.c
 	$(info ===>  GENERATE ASM  $@)
