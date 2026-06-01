@@ -42,7 +42,7 @@ CPPFLAGS := $(CPPFLAGS) $(DEFINES) $(OPTIONS) $(INCLUDES)
 
 ifneq (,$(filter $(TOOLCHAIN),NVCC HIP))
   CPPFLAGS += -D_GPU
-  OBJ   += $(patsubst $(SRC_DIR)/%.cu, $(BUILD_DIR)/%.o, $(wildcard $(SRC_DIR)/*.cu))
+  OBJ   += $(patsubst $(SRC_DIR)/%.cu, $(BUILD_DIR)/%.o,$(wildcard $(SRC_DIR)/*.cu))
 endif
 
 c := ,
@@ -64,8 +64,9 @@ $(BUILD_DIR)/%.o:  %.c $(MAKE_DIR)/include_$(TOOLCHAIN).mk config.mk
 	$(Q)$(CC) $(CPPFLAGS) -MT $(@:.d=.o) -MM  $< > $(BUILD_DIR)/$*.d
 
 $(BUILD_DIR)/%.o: %.cu $(MAKE_DIR)/include_$(TOOLCHAIN).mk config.mk
-	$(info ===>  COMPILE CUDA  $@)
-	$(NVCC) -c $(NVCCFLAGS) $(CPPFLAGS) $< -o $@
+	$(info ===>  COMPILE CUDA $@)
+	$(CC) -c $(CPPFLAGS) $(CFLAGS) $< -o $@
+	$(Q)$(CC) $(CPPFLAGS) -MT $(@:.d=.o) -MM  $< > $(BUILD_DIR)/$*.d
 
 $(BUILD_DIR)/%.s:  %.c
 	$(info ===>  GENERATE ASM  $@)

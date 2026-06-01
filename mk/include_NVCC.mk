@@ -7,12 +7,12 @@ NVCC = nvcc
 LD = $(NVCC)
 
 ifeq ($(strip $(ENABLE_OPENMP)),true)
-OPENMP   = -fopenmp
+OPENMP   = -Xcompiler "-fopenmp"
 endif
 
 VERSION  = --version
 CFLAGS   = -O3 -g -std=c99 $(OPENMP)
-LFLAGS   = -Xcompiler "$(OPENMP)" -lm $(CUDA_ARCH)
+LFLAGS   = $(OPENMP) -lm $(CUDA_ARCH)
 
 # NVCC flags — host compiler options passed via -Xcompiler
 # CUDA_ARCH ?= sm_80
