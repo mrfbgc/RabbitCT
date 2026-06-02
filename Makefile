@@ -4,13 +4,16 @@
 # license that can be found in the LICENSE file.
 
 #CONFIGURE BUILD SYSTEM
-TARGET	   = rabbitRunner-$(TOOLCHAIN)
-BUILD_DIR  = ./build/$(TOOLCHAIN)
+TARGET	   = rabbitRunner-$(SIMD)-$(TOOLCHAIN)
+BUILD_DIR  = ./build/$(SIMD)-$(TOOLCHAIN)
 SRC_DIR    = ./src
 MAKE_DIR   = ./mk
 Q         ?= @
 
 #DO NOT EDIT BELOW
+ifneq ($(shell printf '%s\n' 4.4 "$(MAKE_VERSION)" | sort -V | head -1),4.4)
+$(error GNU make > 4.3 is required (found $(MAKE_VERSION)). Please upgrade or use homebrew GNU make on Macs.)
+endif
 ifeq (,$(wildcard config.mk))
 $(info )
 $(info ====================================================================)
@@ -29,57 +32,19 @@ INCLUDES  += -I$(SRC_DIR)/includes -I$(SRC_DIR) -I$(BUILD_DIR)
 
 VPATH     = $(SRC_DIR)
 ASM       = $(patsubst $(SRC_DIR)/%.c, $(BUILD_DIR)/%.s,$(wildcard $(SRC_DIR)/*.c))
+ASM       += $(patsubst $(SRC_DIR)/%.ispc, $(BUILD_DIR)/%.s,$(wildcard $(SRC_DIR)/*.ispc))
 OBJ       = $(patsubst $(SRC_DIR)/%.c, $(BUILD_DIR)/%.o,$(wildcard $(SRC_DIR)/*.c))
-
-# ISPC support: compile fastRabbit.ispc and include LolaISPC variant
-ifeq ($(ENABLE_ISPC),true)
-ISPC      ?= ispc
-ISPCFLAGS  = --pic --opt=fast-math
-ifeq ($(SIMD),SSE)
-ISPCFLAGS += --target=sse4-i32x4
-endif
-ifeq ($(SIMD),AVX)
-ISPCFLAGS += --target=avx2-i32x8
-endif
-ifeq ($(SIMD),AVX512)
-ISPCFLAGS += --target=avx512skx-i32x16
-endif
-OBJ       += $(BUILD_DIR)/fastRabbit.o
-DEFINES   += -DENABLE_ISPC
-else
-# Exclude LolaISPC.c when ISPC is disabled (missing symbols)
-OBJ       := $(filter-out $(BUILD_DIR)/LolaISPC.o,$(OBJ))
-endif
-
-# Select assembly kernel matching the SIMD option.
-# SSE/AVX/AVX512 require x86-64; NEON requires AARCH64.
-ARCH := $(shell uname -m)
-ifeq ($(SIMD),SSE)
-ifneq ($(ARCH),x86_64)
-$(error SIMD=SSE requires x86-64 but detected $(ARCH))
-endif
-OBJ       += $(patsubst $(SRC_DIR)/%.S, $(BUILD_DIR)/%.o,$(SRC_DIR)/fastRabbitSSE.S)
-endif
-ifeq ($(SIMD),AVX)
-ifneq ($(ARCH),x86_64)
-$(error SIMD=AVX requires x86-64 but detected $(ARCH))
-endif
-OBJ       += $(patsubst $(SRC_DIR)/%.S, $(BUILD_DIR)/%.o,$(SRC_DIR)/fastRabbitAVX.S)
-endif
-ifeq ($(SIMD),AVX512)
-ifneq ($(ARCH),x86_64)
-$(error SIMD=AVX512 requires x86-64 but detected $(ARCH))
-endif
-OBJ       += $(patsubst $(SRC_DIR)/%.S, $(BUILD_DIR)/%.o,$(SRC_DIR)/fastRabbitAVX512.S)
-endif
-ifeq ($(SIMD),NEON)
-ifneq ($(filter $(ARCH),arm64 aarch64),$(ARCH))
-$(error SIMD=NEON requires AARCH64 but detected $(ARCH))
-endif
-OBJ       += $(patsubst $(SRC_DIR)/%.S, $(BUILD_DIR)/%.o,$(SRC_DIR)/fastRabbitNEON.S)
-endif
+OBJ       += $(patsubst $(SRC_DIR)/%.S, $(BUILD_DIR)/%.o,$(SRC_DIR)/fastRabbit$(SIMD).S)
+OBJ       += $(patsubst $(SRC_DIR)/%.ispc, $(BUILD_DIR)/%.o,$(wildcard $(SRC_DIR)/*.ispc))
+include $(MAKE_DIR)/include_ISPC.mk
 SRC       =  $(wildcard $(SRC_DIR)/*.h $(SRC_DIR)/*.c)
 CPPFLAGS := $(CPPFLAGS) $(DEFINES) $(OPTIONS) $(INCLUDES)
+
+ifneq (,$(filter $(TOOLCHAIN),NVCC HIP))
+  CPPFLAGS += -D_GPU
+  OBJ   += $(patsubst $(SRC_DIR)/%.cu, $(BUILD_DIR)/%.o,$(wildcard $(SRC_DIR)/*.cu))
+endif
+
 c := ,
 clist = $(subst $(eval) ,$c,$(strip $1))
 
@@ -98,29 +63,26 @@ $(BUILD_DIR)/%.o:  %.c $(MAKE_DIR)/include_$(TOOLCHAIN).mk config.mk
 	$(CC) -c $(CPPFLAGS) $(CFLAGS) $< -o $@
 	$(Q)$(CC) $(CPPFLAGS) -MT $(@:.d=.o) -MM  $< > $(BUILD_DIR)/$*.d
 
+$(BUILD_DIR)/%.o: %.cu $(MAKE_DIR)/include_$(TOOLCHAIN).mk config.mk
+	$(info ===>  COMPILE CUDA $@)
+	$(CC) -c $(CPPFLAGS) $(CFLAGS) $< -o $@
+	$(Q)$(CC) $(CPPFLAGS) -MT $(@:.d=.o) -MM  $< > $(BUILD_DIR)/$*.d
+
 $(BUILD_DIR)/%.s:  %.c
 	$(info ===>  GENERATE ASM  $@)
 	$(CC) -S $(CPPFLAGS) $(CFLAGS) $< -o $@
 
 $(BUILD_DIR)/%.o:  %.S $(MAKE_DIR)/include_$(TOOLCHAIN).mk config.mk
 	$(info ===>  ASSEMBLE  $@)
-	$(Q)$(CC) -c $(CPPFLAGS) $< -o $@
+	$(CC) -c $(CPPFLAGS) $< -o $@
 
-# ISPC compilation: .ispc -> .o + generated header
-ifeq ($(ENABLE_ISPC),true)
-$(BUILD_DIR)/fastRabbit.o $(BUILD_DIR)/fastRabbit_ispc.h: $(SRC_DIR)/fastRabbit.ispc $(MAKE_DIR)/include_$(TOOLCHAIN).mk config.mk
-
+$(BUILD_DIR)/%.o $(BUILD_DIR)/%_ispc.h &: %.ispc $(MAKE_DIR)/include_$(TOOLCHAIN).mk config.mk
 	$(info ===>  ISPC  $<)
-	$(ISPC) $(ISPCFLAGS) $< -o $(BUILD_DIR)/fastRabbit.o -h $(BUILD_DIR)/fastRabbit_ispc.h
+	$(ISPC) $(ISPCFLAGS) $< -o $(BUILD_DIR)/$*.o -h $(BUILD_DIR)/$*_ispc.h
 
-$(BUILD_DIR)/fastRabbit.s: $(SRC_DIR)/fastRabbit.ispc
+$(BUILD_DIR)/%.s: %.ispc
 	$(info ===>  ISPC ASM  $<)
-	$(Q)$(ISPC) $(ISPCFLAGS) --emit-asm $< -o $@
-
-$(BUILD_DIR)/LolaISPC.o: $(BUILD_DIR)/fastRabbit_ispc.h
-$(BUILD_DIR)/LolaISPC.s: $(BUILD_DIR)/fastRabbit_ispc.h
-ASM += $(BUILD_DIR)/fastRabbit.s
-endif
+	$(ISPC) $(ISPCFLAGS) --emit-asm $< -o $@
 
 .PHONY: clean distclean info asm format
 
@@ -152,5 +114,7 @@ $(BUILD_DIR):
 
 .clangd:
 	$(file > .clangd,$(CLANGD_TEMPLATE))
+
+$(BUILD_DIR)/LolaISPC.o: $(BUILD_DIR)/fastRabbit_ispc.h
 
 -include $(OBJ:.o=.d)
