@@ -30,6 +30,10 @@ extern int lolaIspcBackprojection(RabbitCtGlobalData *);
 extern int lolaIspcFinish(RabbitCtGlobalData *);
 #endif
 
+extern int lolaCudaPrepare(RabbitCtGlobalData *);
+extern int lolaCudaBackprojection(RabbitCtGlobalData *);
+extern int lolaCudaFinish(RabbitCtGlobalData *);
+
 /* ---- global function pointer variables ---- */
 FncPrepareAlgorithmType FncPrepareAlgorithm;
 FncAlgorithmIterationType FncAlgorithmIteration;
@@ -41,6 +45,7 @@ static const AlgorithmEntryType S_ALGORITHMS[] = {
   { "LolaBunny", lolaBunnyPrepare, lolaBunnyBackprojection, lolaBunnyFinish },
   { "LolaOPT",   lolaOptPrepare,   lolaOptBackprojection,   lolaOptFinish   },
   { "LolaASM",   lolaAsmPrepare,   lolaAsmBackprojection,   lolaAsmFinish   },
+  { "LolaCUDA", lolaCudaPrepare, lolaCudaBackprojection, lolaCudaFinish },
 #ifdef ENABLE_ISPC
   { "LolaISPC",  lolaIspcPrepare,  lolaIspcBackprojection,  lolaIspcFinish  },
 #endif
