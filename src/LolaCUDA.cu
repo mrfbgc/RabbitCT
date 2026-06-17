@@ -1,5 +1,6 @@
 #include <cuda_runtime.h>
 #include "rabbitCt.h"
+#include <stdio.h>
 /* ---------- GPU constant memory: projection matrix ---------- */
 __constant__ double d_matrix[12]; // aN in its baseline implementation.
 
@@ -40,6 +41,14 @@ __global__ void backprojectKernel(float *volume,
 {
   int i = blockIdx.x * blockDim.x + threadIdx.x; // calculate the global thread index for x dimension.
   int j = blockIdx.y * blockDim.y + threadIdx.y; // calculate the global thread index for y dimension.
+
+  // Print first 5 threads
+  if (i < 5 && j == 0 && p == 0) {
+    printf("GPU thread running: i=%d, j=%d, block=(%d,%d), thread=(%d,%d)\n",
+           i, j, blockIdx.x, blockIdx.y, threadIdx.x, threadIdx.y);
+}
+
+
   if (i >= l || j >= l) return; // check if the grid can be divided to int.
 
   double x = oL + (double)i * rL; // real world coordinate of the voxel.
