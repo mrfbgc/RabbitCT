@@ -1,0 +1,105 @@
+
+NOTICE: Existing SQLite export found: rabbitct_profile_cuda.sqlite
+        It is assumed file was previously exported from: rabbitct_profile_cuda.nsys-rep
+        Consider using --force-export=true if needed.
+
+Processing [rabbitct_profile_cuda.sqlite] with [/apps/SPACK/1.1.1-alex/opt/spack/linux-almalinux9-zen3/none-none/cuda-12.8.1-xxi5xlg7sxqkbvxlp43lyricuyjpftix/nsight-systems-2024.6.2/host-linux-x64/reports/nvtx_sum.py]... 
+SKIPPED: rabbitct_profile_cuda.sqlite does not contain NV Tools Extension (NVTX) data.
+
+Processing [rabbitct_profile_cuda.sqlite] with [/apps/SPACK/1.1.1-alex/opt/spack/linux-almalinux9-zen3/none-none/cuda-12.8.1-xxi5xlg7sxqkbvxlp43lyricuyjpftix/nsight-systems-2024.6.2/host-linux-x64/reports/osrt_sum.py]... 
+Time (%),Total Time (ns),Num Calls,Avg (ns),Med (ns),Min (ns),Max (ns),StdDev (ns),Name
+93.9,67103888971,2447,27422921.5,10066298.0,1704,100157636,35538529.4,poll
+4.5,3200286601,4,800071650.3,800070400.5,800069483,800076317,3183.8,nanosleep
+1.4,984887430,511,1927372.7,395285.0,2715,35907910,2547524.2,fread
+0.3,181665782,615,295391.5,32785.0,1012,37644769,1663051.4,ioctl
+0.0,3054768,29,105336.8,13988.0,10922,2075591,381448.5,mmap64
+0.0,1553117,70,22187.4,4544.0,1814,1100445,130916.4,fopen
+0.0,1145995,11,104181.4,35942.0,26502,786642,226472.7,sem_timedwait
+0.0,1109082,3,369694.0,327921.0,306128,475033,91874.7,pthread_create
+0.0,567203,61,9298.4,9729.0,1103,43957,8131.1,fclose
+0.0,410866,5,82173.2,78696.0,74308,96702,9178.1,fgets
+0.0,328640,62,5300.6,5200.5,2275,10882,2093.3,open64
+0.0,251430,11,22857.3,15631.0,5520,103856,28050.4,mmap
+0.0,180789,1,180789.0,180789.0,180789,180789,0.0,pthread_cond_wait
+0.0,42115,6,7019.2,7219.5,2796,12414,3349.4,open
+0.0,33888,3,11296.0,5150.0,4770,23968,10975.9,munmap
+0.0,29607,11,2691.5,2816.0,1583,3977,782.6,write
+0.0,29579,2,14789.5,14789.5,5461,24118,13192.5,socket
+0.0,29028,4,7257.0,7320.0,3046,11342,3774.6,pipe2
+0.0,21472,10,2147.2,1608.0,1072,5821,1566.7,read
+0.0,18597,1,18597.0,18597.0,18597,18597,0.0,connect
+0.0,15240,3,5080.0,5992.0,2675,6573,2103.0,pthread_cond_broadcast
+0.0,5000,1,5000.0,5000.0,5000,5000,0.0,bind
+0.0,3768,2,1884.0,1884.0,1774,1994,155.6,fcntl
+0.0,3076,2,1538.0,1538.0,1483,1593,77.8,fwrite
+0.0,1293,1,1293.0,1293.0,1293,1293,0.0,listen
+
+Processing [rabbitct_profile_cuda.sqlite] with [/apps/SPACK/1.1.1-alex/opt/spack/linux-almalinux9-zen3/none-none/cuda-12.8.1-xxi5xlg7sxqkbvxlp43lyricuyjpftix/nsight-systems-2024.6.2/host-linux-x64/reports/cuda_api_sum.py]... 
+Time (%),Total Time (ns),Num Calls,Avg (ns),Med (ns),Min (ns),Max (ns),StdDev (ns),Name
+94.7,21613051764,992,21787350.6,21317233.5,231570,56451762,21575207.5,cudaMemcpy
+4.5,1025424736,496,2067388.6,2062084.5,2034841,2636636,57001.5,cudaDeviceSynchronize
+0.8,181687906,2,90843953.0,90843953.0,194056,181493850,128198313.8,cudaMalloc
+0.0,5946774,496,11989.5,9954.5,8477,328402,15006.3,cudaMemcpyToSymbol
+0.0,4792188,496,9661.7,8081.0,6373,278763,12537.8,cudaLaunchKernel
+0.0,1398847,2,699423.5,699423.5,164156,1234691,756982.6,cudaFree
+0.0,53406,1,53406.0,53406.0,53406,53406,0.0,cudaMemset
+0.0,1994,1,1994.0,1994.0,1994,1994,0.0,cuModuleGetLoadingMode
+
+Processing [rabbitct_profile_cuda.sqlite] with [/apps/SPACK/1.1.1-alex/opt/spack/linux-almalinux9-zen3/none-none/cuda-12.8.1-xxi5xlg7sxqkbvxlp43lyricuyjpftix/nsight-systems-2024.6.2/host-linux-x64/reports/cuda_gpu_kern_sum.py]... 
+Time (%),Total Time (ns),Instances,Avg (ns),Med (ns),Min (ns),Max (ns),StdDev (ns),Name
+100.0,1005324427,496,2026863.8,2021081.0,2020217,2595033,57347.0,"backprojectKernel(float *, const float *, int, float, float, int, int)"
+
+Processing [rabbitct_profile_cuda.sqlite] with [/apps/SPACK/1.1.1-alex/opt/spack/linux-almalinux9-zen3/none-none/cuda-12.8.1-xxi5xlg7sxqkbvxlp43lyricuyjpftix/nsight-systems-2024.6.2/host-linux-x64/reports/cuda_gpu_mem_time_sum.py]... 
+Time (%),Total Time (ns),Count,Avg (ns),Med (ns),Min (ns),Max (ns),StdDev (ns),Operation
+99.5,21435955553,496,43217652.3,42927659.0,42122585,56343683,1431868.7,[CUDA memcpy Device-to-Host]
+0.5,114543867,992,115467.6,109727.5,1024,377822,114969.6,[CUDA memcpy Host-to-Device]
+0.0,350751,1,350751.0,350751.0,350751,350751,0.0,[CUDA memset]
+
+Processing [rabbitct_profile_cuda.sqlite] with [/apps/SPACK/1.1.1-alex/opt/spack/linux-almalinux9-zen3/none-none/cuda-12.8.1-xxi5xlg7sxqkbvxlp43lyricuyjpftix/nsight-systems-2024.6.2/host-linux-x64/reports/cuda_gpu_mem_size_sum.py]... 
+Total (MB),Count,Avg (MB),Med (MB),Min (MB),Max (MB),StdDev (MB),Operation
+266287.972,496,536.871,536.871,536.871,536.871,0.000,[CUDA memcpy Device-to-Host]
+2377.038,992,2.396,2.396,0.000,4.792,2.397,[CUDA memcpy Host-to-Device]
+536.871,1,536.871,536.871,536.871,536.871,0.000,[CUDA memset]
+
+Processing [rabbitct_profile_cuda.sqlite] with [/apps/SPACK/1.1.1-alex/opt/spack/linux-almalinux9-zen3/none-none/cuda-12.8.1-xxi5xlg7sxqkbvxlp43lyricuyjpftix/nsight-systems-2024.6.2/host-linux-x64/reports/openmp_sum.py]... 
+SKIPPED: rabbitct_profile_cuda.sqlite does not contain OpenMP event data.
+
+Processing [rabbitct_profile_cuda.sqlite] with [/apps/SPACK/1.1.1-alex/opt/spack/linux-almalinux9-zen3/none-none/cuda-12.8.1-xxi5xlg7sxqkbvxlp43lyricuyjpftix/nsight-systems-2024.6.2/host-linux-x64/reports/opengl_khr_range_sum.py]... 
+SKIPPED: rabbitct_profile_cuda.sqlite does not contain KHR Extension (KHR_DEBUG) data.
+
+Processing [rabbitct_profile_cuda.sqlite] with [/apps/SPACK/1.1.1-alex/opt/spack/linux-almalinux9-zen3/none-none/cuda-12.8.1-xxi5xlg7sxqkbvxlp43lyricuyjpftix/nsight-systems-2024.6.2/host-linux-x64/reports/opengl_khr_gpu_range_sum.py]... 
+SKIPPED: rabbitct_profile_cuda.sqlite does not contain GPU KHR Extension (KHR_DEBUG) data.
+
+Processing [rabbitct_profile_cuda.sqlite] with [/apps/SPACK/1.1.1-alex/opt/spack/linux-almalinux9-zen3/none-none/cuda-12.8.1-xxi5xlg7sxqkbvxlp43lyricuyjpftix/nsight-systems-2024.6.2/host-linux-x64/reports/vulkan_marker_sum.py]... 
+SKIPPED: rabbitct_profile_cuda.sqlite does not contain Vulkan Debug Extension (Vulkan Debug Util) data.
+
+Processing [rabbitct_profile_cuda.sqlite] with [/apps/SPACK/1.1.1-alex/opt/spack/linux-almalinux9-zen3/none-none/cuda-12.8.1-xxi5xlg7sxqkbvxlp43lyricuyjpftix/nsight-systems-2024.6.2/host-linux-x64/reports/vulkan_gpu_marker_sum.py]... 
+SKIPPED: rabbitct_profile_cuda.sqlite does not contain GPU Vulkan Debug Extension (GPU Vulkan Debug markers) data.
+
+Processing [rabbitct_profile_cuda.sqlite] with [/apps/SPACK/1.1.1-alex/opt/spack/linux-almalinux9-zen3/none-none/cuda-12.8.1-xxi5xlg7sxqkbvxlp43lyricuyjpftix/nsight-systems-2024.6.2/host-linux-x64/reports/dx11_pix_sum.py]... 
+SKIPPED: rabbitct_profile_cuda.sqlite does not contain DX11 CPU debug markers.
+
+Processing [rabbitct_profile_cuda.sqlite] with [/apps/SPACK/1.1.1-alex/opt/spack/linux-almalinux9-zen3/none-none/cuda-12.8.1-xxi5xlg7sxqkbvxlp43lyricuyjpftix/nsight-systems-2024.6.2/host-linux-x64/reports/dx12_gpu_marker_sum.py]... 
+SKIPPED: rabbitct_profile_cuda.sqlite does not contain DX12 GPU debug markers.
+
+Processing [rabbitct_profile_cuda.sqlite] with [/apps/SPACK/1.1.1-alex/opt/spack/linux-almalinux9-zen3/none-none/cuda-12.8.1-xxi5xlg7sxqkbvxlp43lyricuyjpftix/nsight-systems-2024.6.2/host-linux-x64/reports/dx12_pix_sum.py]... 
+SKIPPED: rabbitct_profile_cuda.sqlite does not contain DX12 CPU debug markers.
+
+Processing [rabbitct_profile_cuda.sqlite] with [/apps/SPACK/1.1.1-alex/opt/spack/linux-almalinux9-zen3/none-none/cuda-12.8.1-xxi5xlg7sxqkbvxlp43lyricuyjpftix/nsight-systems-2024.6.2/host-linux-x64/reports/wddm_queue_sum.py]... 
+SKIPPED: rabbitct_profile_cuda.sqlite does not contain WDDM context data.
+
+Processing [rabbitct_profile_cuda.sqlite] with [/apps/SPACK/1.1.1-alex/opt/spack/linux-almalinux9-zen3/none-none/cuda-12.8.1-xxi5xlg7sxqkbvxlp43lyricuyjpftix/nsight-systems-2024.6.2/host-linux-x64/reports/um_sum.py]... 
+SKIPPED: rabbitct_profile_cuda.sqlite does not contain CUDA Unified Memory CPU page faults data.
+
+Processing [rabbitct_profile_cuda.sqlite] with [/apps/SPACK/1.1.1-alex/opt/spack/linux-almalinux9-zen3/none-none/cuda-12.8.1-xxi5xlg7sxqkbvxlp43lyricuyjpftix/nsight-systems-2024.6.2/host-linux-x64/reports/um_total_sum.py]... 
+SKIPPED: rabbitct_profile_cuda.sqlite does not contain CUDA Unified Memory CPU page faults data.
+
+Processing [rabbitct_profile_cuda.sqlite] with [/apps/SPACK/1.1.1-alex/opt/spack/linux-almalinux9-zen3/none-none/cuda-12.8.1-xxi5xlg7sxqkbvxlp43lyricuyjpftix/nsight-systems-2024.6.2/host-linux-x64/reports/um_cpu_page_faults_sum.py]... 
+SKIPPED: rabbitct_profile_cuda.sqlite does not contain CUDA Unified Memory CPU page faults data.
+
+Processing [rabbitct_profile_cuda.sqlite] with [/apps/SPACK/1.1.1-alex/opt/spack/linux-almalinux9-zen3/none-none/cuda-12.8.1-xxi5xlg7sxqkbvxlp43lyricuyjpftix/nsight-systems-2024.6.2/host-linux-x64/reports/openacc_sum.py]... 
+SKIPPED: rabbitct_profile_cuda.sqlite does not contain OpenACC event data.
+
+Processing [rabbitct_profile_cuda.sqlite] with [/apps/SPACK/1.1.1-alex/opt/spack/linux-almalinux9-zen3/none-none/cuda-12.8.1-xxi5xlg7sxqkbvxlp43lyricuyjpftix/nsight-systems-2024.6.2/host-linux-x64/reports/syscall_sum.py]... 
+SKIPPED: rabbitct_profile_cuda.sqlite does not contain syscall data.
+

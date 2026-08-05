@@ -11,9 +11,6 @@ MAKE_DIR   = ./mk
 Q         ?= @
 
 #DO NOT EDIT BELOW
-ifneq ($(shell printf '%s\n' 4.4 "$(MAKE_VERSION)" | sort -V | head -1),4.4)
-$(error GNU make > 4.3 is required (found $(MAKE_VERSION)). Please upgrade or use homebrew GNU make on Macs.)
-endif
 ifeq (,$(wildcard config.mk))
 $(info )
 $(info ====================================================================)
